@@ -1,0 +1,26 @@
+{
+    "dependencies": {
+        "async": "0.2.x",
+        "aws-sdk": "latest",
+        "coffee-script": "1.4.x",
+        "request": "latest",
+        "underscore": "latest"
+    },
+    "devDependencies": {
+        "commander": "*",
+        "docco": "*",
+        "mocha": "*",
+        "should": "*",
+        "supervisor": "*"
+    },
+    "engines": {
+        "node": "0.8.x",
+        "npm": "1.1.49"
+    },
+    "name": "moz-aws-cleanup",
+    "private": true,
+    "scripts": {
+        "test": "mocha --require should --compilers coffee:coffee-script --colors"
+    },
+    "version": "0.0.1"
+}
