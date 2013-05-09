@@ -25,6 +25,7 @@ new AWS.EC2().describeRegions (err, regionData) ->
 
     # 
     # Creates a callback for `async` so we can run these requests in parallel
+    #
     makeReq = (region) ->
         (cb) ->
             opts =
@@ -39,7 +40,7 @@ new AWS.EC2().describeRegions (err, regionData) ->
                 instances = []
                 for r in instanceList.Reservations
                     for instance in r.Instances
-                        # console.log instance
+                        #console.log instance
                         instData =
                             id   : instance.InstanceId
 
@@ -52,6 +53,11 @@ new AWS.EC2().describeRegions (err, regionData) ->
 
                             status: instance.State.Name
                             type : instance.InstanceType
+
+                            # the SSH key on the box
+                            key: instance.KeyName
+                            dns: instance.PublicDnsName
+
                             tags: []
 
                         for tag in instance.Tags
@@ -198,13 +204,14 @@ new AWS.EC2().describeRegions (err, regionData) ->
 
         pricing = results.pricing
 
+        console.log "region,id,dns,type,status,uptime,price_hourly,name,keyname,tags"
         for regName,instances of results.running
             for i in instances
 
                 price = if pricing[regName]?[i.type]? then pricing[regName][i.type] else -1
 
                 tags = i.tags.join(", ")
-                csv = [regName, i.id, i.type, i.status, i.runtime, price, i.name, tags].join('","')
+                csv = [regName, i.id, i.dns, i.type, i.status, i.runtime, price, i.name, i.key, tags].join('","')
                 #csv = csv.substring 0, csv.length - 1
                 console.log "\"#{csv}\""
 
